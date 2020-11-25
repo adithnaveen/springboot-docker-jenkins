@@ -31,7 +31,7 @@ pipeline {
                 sh "echo no containers"
             }
             
-        }
+        } 
 
         stage ('Building demo-app image') {
                 sh '''
