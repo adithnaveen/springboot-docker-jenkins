@@ -10,7 +10,7 @@ pipeline {
 
     
     environment {
-        ORG_NAME = "naveen"
+        ORG_NAME = "Naveen"
         APP_NAME = "demo-app"
         APP_VERSION = "1.0-SNAPSHOT"
         APP_CONTEXT_ROOT = "/"
@@ -34,6 +34,15 @@ pipeline {
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
     }
+
+
+        stage('Build Docker image') {
+            steps {
+                echo "-=- build Docker image -=-"
+                sh "docker build -t ${ORG_NAME}/${APP_NAME}:${APP_VERSION} -t ${ORG_NAME}/${APP_NAME}:latest ."
+            }
+        }
+
   }
 
 
