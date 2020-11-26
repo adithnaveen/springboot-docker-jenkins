@@ -35,11 +35,27 @@ pipeline {
         }
     }
 
+    stage ('Killing Containers') {
+        steps {
+            
+            echo "====== killing Containers====="
+            sh "docker kill  ${TEST_CONTAINER_NAME}
+        }
+    }
 
-        stage('Build Docker image') {
+
+
+    stage('Build Docker image') {
+        steps {
+            echo "-=- build Docker image -=-"
+            sh "docker build -t ${ORG_NAME}/${APP_NAME}:${APP_VERSION} -t ${ORG_NAME}/${APP_NAME}:latest ."
+        }
+    }
+
+   stage('Run Docker image') {
             steps {
-                echo "-=- build Docker image -=-"
-                sh "docker build -t ${ORG_NAME}/${APP_NAME}:${APP_VERSION} -t ${ORG_NAME}/${APP_NAME}:latest ."
+                echo "-=- run Docker image -=-"
+                sh "docker run --name ${TEST_CONTAINER_NAME} --detach --rm --network demo-network --expose 9090 --env JAVA_OPTS='-javaagent:/jacocoagent.jar=output=tcpserver,address=*,port=9090' ${ORG_NAME}/${APP_NAME}:latest"
             }
         }
 
