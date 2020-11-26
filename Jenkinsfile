@@ -37,9 +37,9 @@ pipeline {
 
     stage ('Killing Containers') {
         steps {
-            
+
             echo "====== killing Containers====="
-            sh "docker kill  ${TEST_CONTAINER_NAME}
+            sh "docker kill  ${TEST_CONTAINER_NAME}"
         }
     }
 
