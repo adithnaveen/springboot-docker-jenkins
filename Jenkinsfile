@@ -10,7 +10,7 @@ pipeline {
 
     
     environment {
-        ORG_NAME = "Naveen"
+        ORG_NAME = "naveen"
         APP_NAME = "demo-app"
         APP_VERSION = "1.0-SNAPSHOT"
         APP_CONTEXT_ROOT = "/"
