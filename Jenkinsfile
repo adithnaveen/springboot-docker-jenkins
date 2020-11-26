@@ -16,7 +16,6 @@ pipeline {
         APP_CONTEXT_ROOT = "/"
         APP_LISTENING_PORT = "9090"
         TEST_CONTAINER_NAME = "ci-${APP_NAME}-${BUILD_NUMBER}"
-        DOCKER_HUB = credentials("${ORG_NAME}-docker-hub")
     }
 
   stages {
