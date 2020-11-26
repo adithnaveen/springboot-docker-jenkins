@@ -16,6 +16,7 @@ pipeline {
         APP_CONTEXT_ROOT = "/"
         APP_LISTENING_PORT = "9090"
         TEST_CONTAINER_NAME = "ci-${APP_NAME}-${BUILD_NUMBER}"
+        PREV_CONTAINER_NAME="ci-${APP_NAME}-${currentBuild.previousBuild.number}"
     }
 
   stages {
@@ -39,11 +40,13 @@ pipeline {
         steps {
 
             echo "====== killing Containers====="
+            echo "Current Container: ${TEST_CONTAINER_NAME} "
+            echo "Previous Container ${PREV_CONTAINER_NAME}"
             script {
                 try {
-                    sh "************docker kill  ${TEST_CONTAINER_NAME} **************"
+                    sh "docker kill  ${TEST_CONTAINER_NAME}"
                 }catch(e) {
-                    echo "Container not found ${TEST_CONTAINER_NAME-1}"
+                    echo "Container not found ${TEST_CONTAINER_NAME}"
                 }
             }
         }
@@ -61,7 +64,7 @@ pipeline {
    stage('Run Docker image') {
             steps {
                 echo "-=- run Docker image -=-"
-                sh "docker run --name ${TEST_CONTAINER_NAME} --detach  --network demo-network -p 9090:9090 --expose 9090 --env JAVA_OPTS='-javaagent:/jacocoagent.jar=output=tcpserver,address=*,port=9090' ${ORG_NAME}/${APP_NAME}:latest"
+                sh "docker run --name ${TEST_CONTAINER_NAME} --detach  --network demo-network -p 9090:9090' ${ORG_NAME}/${APP_NAME}:latest"
             }
         }
 
