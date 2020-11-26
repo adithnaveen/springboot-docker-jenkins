@@ -8,61 +8,23 @@ pipeline {
         maven 'M3'
     }
 
+    
+    environment {
+        ORG_NAME = "naveen"
+        APP_NAME = "demo-app"
+        APP_VERSION = "1.0-SNAPSHOT"
+        APP_CONTEXT_ROOT = "/"
+        APP_LISTENING_PORT = "9090"
+        TEST_CONTAINER_NAME = "ci-${APP_NAME}-${BUILD_NUMBER}"
+        DOCKER_HUB = credentials("${ORG_NAME}-docker-hub")
+    }
 
-
-    stages {
-        stage ('Packaging Location') {
-            steps {
-                // sh '''
-                //     echo "PATH = ${PATH}"
-                //     echo "M2_HOME = ${M2_HOME}"
-                // '''
-                // // sh "mvn clean -Dmaven.test.skip=${params.tests}"
-                sh "mvn clean  -Dmaven.test.skip=true"
-            }
-        }
-
-        stage('killing containers') {
-            steps {
-                script {
-                    try{
-                            
-                        sh '''
-                        docker kill demo-app-9090
-                        '''
-                        }
-                    catch(e){
-                        sh "echo no containers"
-                    }
-
-                    try{
-                            
-                        sh '''
-                        docker rm demo-app-9090
-                        '''
-                        }
-                    catch(e){
-                        sh "echo no containers"
-                    }
-                }
-            }
-        } 
-
-    stage ('Building demo-app image') {
+  stages {
+    stage('Compile') {
         steps {
-            sh '''
-            docker build -t demo-app . 
-            '''
+            echo "-=- compiling project -=-"
+            sh "mvn clean compile"
         }
     }
-
-
-    stage ('Running demo-app container') {
-        steps { 
-            sh '''
-            docker run  --name=demo-app-container-9090 --restart=always --net=demo-network -d -p 9090:9090 demo-app
-            '''
-            }
-        }
-    }
+  }
 }
