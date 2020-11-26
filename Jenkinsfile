@@ -1,4 +1,4 @@
-properties([parameters([choice(choices:'true\nfalse',description:'Exclude Testcases',name:'tests')])])
+// properties([parameters([choice(choices:'true\nfalse',description:'Exclude Testcases',name:'tests')])])
 
 pipeline {
     agent any 
@@ -9,31 +9,32 @@ pipeline {
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
                 '''
-                sh "mvn clean -Dmaven.test.skip=${params.tests}"
+                // sh "mvn clean -Dmaven.test.skip=${params.tests}"
+                sh "mvn clean pakcage"
             }
-        }    
+        }
 
-    stage('killing containers') {
-        steps {
-            try{
-                    
-                sh '''
-                docker kill demo-app-9090
-                '''
+        stage('killing containers') {
+            steps {
+                try{
+                        
+                    sh '''
+                    docker kill demo-app-9090
+                    '''
+                    }
+                catch(e){
+                    sh "echo no containers"
                 }
-            catch(e){
-                sh "echo no containers"
-            }
 
-            try{
-                    
-                sh '''
-                docker rm demo-app-9090
-                '''
+                try{
+                        
+                    sh '''
+                    docker rm demo-app-9090
+                    '''
+                    }
+                catch(e){
+                    sh "echo no containers"
                 }
-            catch(e){
-                sh "echo no containers"
-            }
             }
         } 
 
