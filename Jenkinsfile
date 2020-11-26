@@ -41,9 +41,9 @@ pipeline {
             echo "====== killing Containers====="
             script {
                 try {
-                    sh "docker kill  ${TEST_CONTAINER_NAME}"
+                    sh "************docker kill  ${TEST_CONTAINER_NAME} **************"
                 }catch(e) {
-                    echo "Container not found ${TEST_CONTAINER_NAME}"
+                    echo "Container not found ${TEST_CONTAINER_NAME-1}"
                 }
             }
         }
@@ -61,7 +61,7 @@ pipeline {
    stage('Run Docker image') {
             steps {
                 echo "-=- run Docker image -=-"
-                sh "docker run --name ${TEST_CONTAINER_NAME} --detach --rm --network demo-network -p 9090:9090 --expose 9090 --env JAVA_OPTS='-javaagent:/jacocoagent.jar=output=tcpserver,address=*,port=9090' ${ORG_NAME}/${APP_NAME}:latest"
+                sh "docker run --name ${TEST_CONTAINER_NAME} --detach  --network demo-network -p 9090:9090 --expose 9090 --env JAVA_OPTS='-javaagent:/jacocoagent.jar=output=tcpserver,address=*,port=9090' ${ORG_NAME}/${APP_NAME}:latest"
             }
         }
 
