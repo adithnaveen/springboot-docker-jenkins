@@ -44,9 +44,10 @@ pipeline {
             echo "Previous Container ${PREV_CONTAINER_NAME}"
             script {
                 try {
-                    sh "docker kill  ${TEST_CONTAINER_NAME}"
-                }catch(e) {
-                    echo "Container not found ${TEST_CONTAINER_NAME}"
+                    sh "docker rm ${PREV_CONTAINER_NAME}"
+                }catch(Exception e) {
+                    echo e.getMessage() 
+                    echo "Container not found ${PREV_CONTAINER_NAME}"
                 }
             }
         }
