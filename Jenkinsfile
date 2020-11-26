@@ -18,7 +18,7 @@ pipeline {
                 //     echo "M2_HOME = ${M2_HOME}"
                 // '''
                 // // sh "mvn clean -Dmaven.test.skip=${params.tests}"
-                sh "mvn clean pakcage"
+                sh "mvn clean  -Dmaven.test.skip=true"
             }
         }
 
