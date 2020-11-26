@@ -25,5 +25,17 @@ pipeline {
             sh "mvn clean compile"
         }
     }
+  
+
+    stage('Package') {
+        steps {
+            echo "-=- packaging project -=-"
+            sh "mvn package -DskipTests"
+            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+        }
+    }
   }
+
+
+
 }
