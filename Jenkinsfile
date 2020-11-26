@@ -16,24 +16,26 @@ pipeline {
 
         stage('killing containers') {
             steps {
-                try{
-                        
-                    sh '''
-                    docker kill demo-app-9090
-                    '''
+                script {
+                    try{
+                            
+                        sh '''
+                        docker kill demo-app-9090
+                        '''
+                        }
+                    catch(e){
+                        sh "echo no containers"
                     }
-                catch(e){
-                    sh "echo no containers"
-                }
 
-                try{
-                        
-                    sh '''
-                    docker rm demo-app-9090
-                    '''
+                    try{
+                            
+                        sh '''
+                        docker rm demo-app-9090
+                        '''
+                        }
+                    catch(e){
+                        sh "echo no containers"
                     }
-                catch(e){
-                    sh "echo no containers"
                 }
             }
         } 
