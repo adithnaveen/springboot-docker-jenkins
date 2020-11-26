@@ -65,12 +65,9 @@ pipeline {
    stage('Run Docker image') {
             steps {
                 echo "-=- run Docker image -=-"
-                sh "docker run --name ${TEST_CONTAINER_NAME} --detach  --network demo-network -p 9090:9090' ${ORG_NAME}/${APP_NAME}:latest"
+                sh "docker run --name=${TEST_CONTAINER_NAME} --detach --restart=always --network demo-network -p 9090:9090 ${ORG_NAME}/${APP_NAME}:latest"
             }
         }
 
   }
-
-
-
 }
