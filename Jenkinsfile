@@ -39,7 +39,11 @@ pipeline {
         steps {
 
             echo "====== killing Containers====="
+            try {
             sh "docker kill  ${TEST_CONTAINER_NAME}"
+            }catch(e) {
+                echo "Container not found ${TEST_CONTAINER_NAME}"
+            }
         }
     }
 
