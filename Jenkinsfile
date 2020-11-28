@@ -34,6 +34,7 @@ pipeline {
 
     stage('Package') {
 
+// to execute this stage when params.executeTest is true 
         when {
             expression {
                 params.executeTests
@@ -42,7 +43,7 @@ pipeline {
 
         steps {
             echo "-=- packaging project -=-"
-            sh "mvn package -DskipTests=true"
+            sh "mvn package -DskipTests=${params.executeTests}"
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
     }
