@@ -1,0 +1,34 @@
+version: '3.9'
+services: 
+  mongo:
+      container_name: mongo
+      image: mongo
+      command: mongod
+      volumes:
+        - mongo-data:/data/db
+        - mongo-data:/data/configdb
+      ports:
+        - 27017:27017
+      restart: always 
+      
+  demoApplication: 
+    build:
+      context: . 
+      dockerfile: Dockerfile
+    image: demo-app
+    container_name: demo-app 
+    restart: always
+    ports: 
+      - 9090:9090
+    depends_on: 
+      - mongo
+    
+
+networks: 
+  default:
+    external: 
+      name: demo-network
+volumes: 
+  mongo-data: 
+    driver: local 
+
