@@ -2,7 +2,11 @@
 
 pipeline {
     agent any 
-    
+    parameters {
+        string(name:"VERSION", defaultValue:'', description:'version to deploy')
+        choice(name:"Version", choices : ['1.1', '1.2', '1.3'], description:'')
+        booleanParam(name:'executeTests', defaultValue:true, description:"skip tests")
+    }
 
     tools {
         maven 'M3'
@@ -29,9 +33,16 @@ pipeline {
   
 
     stage('Package') {
+
+        when {
+            expression {
+                params.executeTests
+            }
+        }
+
         steps {
             echo "-=- packaging project -=-"
-            sh "mvn package -DskipTests"
+            sh "mvn package -DskipTests=true"
             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
         }
     }
@@ -65,6 +76,7 @@ pipeline {
    stage('Run Docker image') {
             steps {
                 echo "-=- run Docker image -=-"
+                echo "Executing  ${VERSION}"
                 sh "docker run --name=${TEST_CONTAINER_NAME} --detach --restart=always --network demo-network -p 9090:9090 ${ORG_NAME}/${APP_NAME}:latest"
             }
         }
